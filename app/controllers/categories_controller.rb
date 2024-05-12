@@ -5,13 +5,13 @@ class CategoriesController < ApplicationController
     def index
         @categories = Category.all.paginate(page: params[:page], per_page: 2)
         # @categories = Category.all
-        render json: @categories
+        render json: @categories , status: :ok
     end
 
     def create
         @category = Category.new(category_params)
         if @category.save
-            render json: @category
+            render json: @category, status: :created
         else
             render json: @category.errors.full_messages
         end
@@ -19,15 +19,15 @@ class CategoriesController < ApplicationController
 
     def show
         @category = Category.find(params[:id])
-        render json: @category
+        render json: @category, status: :ok
     end
 
     def update
         @category = Category.find(params[:id])
         if @category.update(category_params)
-            render json: @category
+            render json: @category, status: :ok
         else
-            render json: @category.errors.full_messages
+            render json: @category.errors.full_messages, status: :unprocessable_entity
         end
     end
 
@@ -35,9 +35,9 @@ class CategoriesController < ApplicationController
         @category = Category.find(params[:id])
         if @category 
             @category.destroy 
-            render json: { message: "User has been successfully deleted"}
+            render json: { message: "Category has been successfully deleted"}, status: :no_content
         else
-            render json: { message: "User not exists...!"}
+            render json: { message: "Category not exists...!"}, status: :not_found
         end
     end
 
